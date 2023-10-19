@@ -6,10 +6,26 @@ use tao::menu::AboutMetadata;
 use tao::menu::{MenuBar as Menu, MenuItem};
 use tao::window::WindowBuilder;
 
+use tracing_subscriber::filter::FilterFn;
+
+use tracing_subscriber::{
+    layer::{Layer, SubscriberExt},
+    util::SubscriberInitExt,
+};
+
+
 fn main() {
+    let my_filter = FilterFn::new(|metadata| true);
+
+    let my_layer = tracing_subscriber::fmt::layer();
+
+    tracing_subscriber::registry()
+        .with(my_layer.with_filter(my_filter))
+        .init();
+
     // using Config::default fixes the crash on macos
     // not adding the `main_menu` in `webview_config()` also fixes the crash on macos
-    dioxus_desktop::launch_cfg(app,  /*Config::default())*/ webview_config())
+    dioxus_desktop::launch_cfg(app, /*Config::default())*/ webview_config())
 }
 
 fn app(cx: Scope) -> Element {
@@ -88,7 +104,7 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
     if with_menu {
         #[cfg(target_os = "macos")]
         {
-           window = window.with_menu(main_menu)
+            window = window.with_menu(main_menu)
         }
     }
 

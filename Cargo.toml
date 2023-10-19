@@ -13,3 +13,5 @@ dioxus-router = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" 
 dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829", features = ["transparent"] }
 dioxus-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
 fermi = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+
+tracing-subscriber = { version = "0.3.17", features = [ "fmt"] }
