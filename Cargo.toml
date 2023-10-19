@@ -1,0 +1,15 @@
+[package]
+name = "example-dioxus"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dioxus = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+dioxus-hooks = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+dioxus-router = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+dioxus-desktop = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829", features = ["transparent"] }
+dioxus-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
+fermi = { git = "https://github.com/DioxusLabs/dioxus", rev = "60ee829" }
