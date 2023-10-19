@@ -7,7 +7,9 @@ use tao::menu::{MenuBar as Menu, MenuItem};
 use tao::window::WindowBuilder;
 
 fn main() {
-    dioxus_desktop::launch_cfg(app, webview_config())
+    // using Config::default fixes the crash on macos
+    // not adding the `main_menu` in `webview_config()` also fixes the crash on macos
+    dioxus_desktop::launch_cfg(app,  /*Config::default())*/ webview_config())
 }
 
 fn app(cx: Scope) -> Element {
@@ -86,7 +88,7 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
     if with_menu {
         #[cfg(target_os = "macos")]
         {
-            window = window.with_menu(main_menu)
+           window = window.with_menu(main_menu)
         }
     }
 
