@@ -3,8 +3,8 @@ use dioxus_desktop::tao;
 use dioxus_desktop::Config;
 use dioxus_desktop::LogicalSize;
 
-use dioxus_desktop::tao::event_loop::EventLoopBuilder;
-use dioxus_desktop::wry;
+
+
 use muda::AboutMetadata;
 use muda::Menu;
 use muda::PredefinedMenuItem;
@@ -18,15 +18,14 @@ use tracing_subscriber::{
     util::SubscriberInitExt,
 };
 
-#[cfg(target_os = "macos")]
-use wry::application::platform::macos::WindowExtMacOS;
+
 #[cfg(target_os = "linux")]
 use wry::application::platform::unix::WindowExtUnix;
 #[cfg(target_os = "windows")]
 use wry::application::platform::windows::{EventLoopBuilderExtWindows, WindowExtWindows};
 
 fn main() {
-    let my_filter = FilterFn::new(|metadata| true);
+    let my_filter = FilterFn::new(|_metadata| true);
 
     let my_layer = tracing_subscriber::fmt::layer();
 
@@ -61,7 +60,7 @@ pub(crate) fn webview_config() -> Config {
 </html>"#
                 .to_string(),
         )
-        .with_file_drop_handler(|_w, drag_event| true)
+        .with_file_drop_handler(|_w, _drag_event| true)
         .with_disable_context_menu(false)
 }
 
@@ -71,14 +70,14 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
     let edit_menu = Submenu::new("Edit", true);
     let window_menu = Submenu::new("Window", true);
 
-    app_menu.append_items(&[
+    let _ = app_menu.append_items(&[
         &PredefinedMenuItem::about("Uplink".into(), Some(AboutMetadata::default())),
         &PredefinedMenuItem::quit(None),
     ]);
     // add native shortcuts to `edit_menu` menu
     // in macOS native item are required to get keyboard shortcut
     // to works correctly
-    edit_menu.append_items(&[
+    let _ = edit_menu.append_items(&[
         &PredefinedMenuItem::undo(None),
         &PredefinedMenuItem::redo(None),
         &PredefinedMenuItem::separator(),
@@ -88,7 +87,7 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
         &PredefinedMenuItem::select_all(None),
     ]);
 
-    window_menu.append_items(&[
+    let _ =  window_menu.append_items(&[
         &PredefinedMenuItem::minimize(None),
         //&PredefinedMenuItem::zoom(None),
         &PredefinedMenuItem::separator(),
@@ -98,9 +97,11 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
         &PredefinedMenuItem::close_window(None),
     ]);
 
-    main_menu.append(&app_menu);
-    main_menu.append(&edit_menu);
-    main_menu.append(&window_menu);
+    let _ = main_menu.append_items(&[
+        &app_menu,
+        &edit_menu,
+        &window_menu
+    ]);
 
     /*let mut event_loop_builder = EventLoopBuilder::new();
 
