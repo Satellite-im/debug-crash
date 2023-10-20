@@ -36,7 +36,7 @@ fn main() {
     let window_menu = Submenu::new("Window", true);
 
     let _ = app_menu.append_items(&[
-        &PredefinedMenuItem::about("Uplink".into(), Some(AboutMetadata::default())),
+        &PredefinedMenuItem::about("About".into(), Some(AboutMetadata::default())),
         &PredefinedMenuItem::quit(None),
     ]);
     // add native shortcuts to `edit_menu` menu
