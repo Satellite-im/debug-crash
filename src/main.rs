@@ -2,8 +2,13 @@ use dioxus::prelude::*;
 use dioxus_desktop::tao;
 use dioxus_desktop::Config;
 use dioxus_desktop::LogicalSize;
-use tao::menu::AboutMetadata;
-use tao::menu::{MenuBar as Menu, MenuItem};
+
+use dioxus_desktop::tao::event_loop::EventLoopBuilder;
+use dioxus_desktop::wry;
+use muda::AboutMetadata;
+use muda::Menu;
+use muda::PredefinedMenuItem;
+use muda::Submenu;
 use tao::window::WindowBuilder;
 
 use tracing_subscriber::filter::FilterFn;
@@ -13,6 +18,12 @@ use tracing_subscriber::{
     util::SubscriberInitExt,
 };
 
+#[cfg(target_os = "macos")]
+use wry::application::platform::macos::WindowExtMacOS;
+#[cfg(target_os = "linux")]
+use wry::application::platform::unix::WindowExtUnix;
+#[cfg(target_os = "windows")]
+use wry::application::platform::windows::{EventLoopBuilderExtWindows, WindowExtWindows};
 
 fn main() {
     let my_filter = FilterFn::new(|metadata| true);
@@ -55,60 +66,92 @@ pub(crate) fn webview_config() -> Config {
 }
 
 pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> WindowBuilder {
-    let mut main_menu = Menu::new();
-    let mut app_menu = Menu::new();
-    let mut edit_menu = Menu::new();
-    let mut window_menu = Menu::new();
+    let main_menu = Menu::new();
+    let app_menu = Submenu::new("Uplink", true);
+    let edit_menu = Submenu::new("Edit", true);
+    let window_menu = Submenu::new("Window", true);
 
-    app_menu.add_native_item(MenuItem::About(
-        String::from("Uplink"),
-        AboutMetadata::default(),
-    ));
-    app_menu.add_native_item(MenuItem::Quit);
+    app_menu.append_items(&[
+        &PredefinedMenuItem::about("Uplink".into(), Some(AboutMetadata::default())),
+        &PredefinedMenuItem::quit(None),
+    ]);
     // add native shortcuts to `edit_menu` menu
     // in macOS native item are required to get keyboard shortcut
     // to works correctly
-    edit_menu.add_native_item(MenuItem::Undo);
-    edit_menu.add_native_item(MenuItem::Redo);
-    edit_menu.add_native_item(MenuItem::Separator);
-    edit_menu.add_native_item(MenuItem::Cut);
-    edit_menu.add_native_item(MenuItem::Copy);
-    edit_menu.add_native_item(MenuItem::Paste);
-    edit_menu.add_native_item(MenuItem::SelectAll);
+    edit_menu.append_items(&[
+        &PredefinedMenuItem::undo(None),
+        &PredefinedMenuItem::redo(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::cut(None),
+        &PredefinedMenuItem::copy(None),
+        &PredefinedMenuItem::paste(None),
+        &PredefinedMenuItem::select_all(None),
+    ]);
 
-    window_menu.add_native_item(MenuItem::Minimize);
-    window_menu.add_native_item(MenuItem::Zoom);
-    window_menu.add_native_item(MenuItem::Separator);
-    window_menu.add_native_item(MenuItem::ShowAll);
-    window_menu.add_native_item(MenuItem::EnterFullScreen);
-    window_menu.add_native_item(MenuItem::Separator);
-    window_menu.add_native_item(MenuItem::CloseWindow);
+    window_menu.append_items(&[
+        &PredefinedMenuItem::minimize(None),
+        //&PredefinedMenuItem::zoom(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::show_all(None),
+        &PredefinedMenuItem::fullscreen(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::close_window(None),
+    ]);
 
-    main_menu.add_submenu("Uplink", true, app_menu);
-    main_menu.add_submenu("Edit", true, edit_menu);
-    main_menu.add_submenu("Window", true, window_menu);
+    main_menu.append(&app_menu);
+    main_menu.append(&edit_menu);
+    main_menu.append(&window_menu);
 
-    let title = "suplink";
+    /*let mut event_loop_builder = EventLoopBuilder::new();
 
-    #[allow(unused_mut)]
+    #[cfg(target_os = "windows")]
+    {
+        let menu_bar = main_menu.clone();
+        event_loop_builder.with_msg_hook(move |msg| {
+            use windows_sys::Win32::UI::WindowsAndMessaging::{TranslateAcceleratorW, MSG};
+            unsafe {
+                let msg = msg as *const MSG;
+                let translated = TranslateAcceleratorW((*msg).hwnd, menu_bar.haccel(), msg);
+                translated == 1
+            }
+        });
+    }*/
+
+    //let event_loop = event_loop_builder.build();
+
     let mut window = WindowBuilder::new()
-        .with_title(title)
+        .with_title("uplink")
         .with_resizable(true)
         // We start the min inner size smaller because the prelude pages like unlock can be rendered much smaller.
         .with_min_inner_size(LogicalSize::new(300.0, 350.0));
+    // .build(&event_loop)
+    // .unwrap();
 
     if with_predefined_size {
         window = window.with_inner_size(LogicalSize::new(950.0, 600.0));
     }
 
+    #[cfg(target_os = "windows")]
+    {
+        main_menu.init_for_hwnd(window.hwnd() as _);
+    }
+    #[cfg(target_os = "linux")]
+    {
+        main_menu.init_for_gtk_window(window.gtk_window(), window.default_vbox());
+    }
+    #[cfg(target_os = "macos")]
+    {
+        main_menu.init_for_nsapp();
+    }
+
     if with_menu {
         #[cfg(target_os = "macos")]
         {
-            window = window.with_menu(main_menu)
+            //window = window.with_menu(main_menu)
         }
     }
 
-    #[cfg(target_os = "macos")]
+    /*#[cfg(target_os = "macos")]
     {
         use dioxus_desktop::tao::platform::macos::WindowBuilderExtMacOS;
 
@@ -123,6 +166,6 @@ pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> Window
     #[cfg(not(target_os = "macos"))]
     {
         window = window.with_decorations(false).with_transparent(true);
-    }
+    }*/
     window
 }
