@@ -461,6 +461,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "constcat"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd7e35aee659887cbfb97aaf227ac12cad1a9d7c71e55ff3376839ed4e282d08"
+
+[[package]]
 name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,7 +670,7 @@ dependencies = [
 [[package]]
 name = "dioxus"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "dioxus-core",
  "dioxus-core-macro",
@@ -677,7 +683,7 @@ dependencies = [
 [[package]]
 name = "dioxus-core"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "bumpalo",
  "futures-channel",
@@ -693,8 +699,10 @@ dependencies = [
 [[package]]
 name = "dioxus-core-macro"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
+ "constcat",
+ "dioxus-core",
  "dioxus-rsx",
  "proc-macro2",
  "quote",
@@ -710,7 +718,7 @@ checksum = "2ea539174bb236e0e7dc9c12b19b88eae3cb574dedbd0252a2d43ea7e6de13e2"
 [[package]]
 name = "dioxus-desktop"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "async-trait",
  "core-foundation",
@@ -741,7 +749,7 @@ dependencies = [
 [[package]]
 name = "dioxus-hooks"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "dioxus-core",
  "dioxus-debug-cell",
@@ -754,7 +762,7 @@ dependencies = [
 [[package]]
 name = "dioxus-hot-reload"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "dioxus-core",
  "dioxus-html",
@@ -767,7 +775,7 @@ dependencies = [
 [[package]]
 name = "dioxus-html"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "async-channel",
  "async-trait",
@@ -786,12 +794,12 @@ dependencies = [
 [[package]]
 name = "dioxus-interpreter-js"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 
 [[package]]
 name = "dioxus-router"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "anyhow",
  "dioxus",
@@ -811,7 +819,7 @@ dependencies = [
 [[package]]
 name = "dioxus-router-macro"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -822,7 +830,7 @@ dependencies = [
 [[package]]
 name = "dioxus-rsx"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "dioxus-core",
  "proc-macro2",
@@ -969,7 +977,7 @@ dependencies = [
 [[package]]
 name = "fermi"
 version = "0.4.2"
-source = "git+https://github.com/ealmloff/dioxus?branch=bump-wry#ea69811e70fa8f855f3e3032bd6e6ea31381c6b5"
+source = "git+https://github.com/satellite-im/dioxus?rev=1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2#1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2"
 dependencies = [
  "dioxus-core",
  "im-rc",
