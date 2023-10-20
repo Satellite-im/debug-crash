@@ -3,8 +3,6 @@ use dioxus_desktop::tao;
 use dioxus_desktop::Config;
 use dioxus_desktop::LogicalSize;
 
-
-
 use muda::AboutMetadata;
 use muda::Menu;
 use muda::PredefinedMenuItem;
@@ -17,7 +15,6 @@ use tracing_subscriber::{
     layer::{Layer, SubscriberExt},
     util::SubscriberInitExt,
 };
-
 
 #[cfg(target_os = "linux")]
 use wry::application::platform::unix::WindowExtUnix;
@@ -32,6 +29,53 @@ fn main() {
     tracing_subscriber::registry()
         .with(my_layer.with_filter(my_filter))
         .init();
+
+    let main_menu = Menu::new();
+    let app_menu = Submenu::new("Uplink", true);
+    let edit_menu = Submenu::new("Edit", true);
+    let window_menu = Submenu::new("Window", true);
+
+    let _ = app_menu.append_items(&[
+        &PredefinedMenuItem::about("Uplink".into(), Some(AboutMetadata::default())),
+        &PredefinedMenuItem::quit(None),
+    ]);
+    // add native shortcuts to `edit_menu` menu
+    // in macOS native item are required to get keyboard shortcut
+    // to works correctly
+    let _ = edit_menu.append_items(&[
+        &PredefinedMenuItem::undo(None),
+        &PredefinedMenuItem::redo(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::cut(None),
+        &PredefinedMenuItem::copy(None),
+        &PredefinedMenuItem::paste(None),
+        &PredefinedMenuItem::select_all(None),
+    ]);
+
+    let _ = window_menu.append_items(&[
+        &PredefinedMenuItem::minimize(None),
+        //&PredefinedMenuItem::zoom(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::show_all(None),
+        &PredefinedMenuItem::fullscreen(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::close_window(None),
+    ]);
+
+    let _ = main_menu.append_items(&[&app_menu, &edit_menu, &window_menu]);
+
+    #[cfg(target_os = "windows")]
+    {
+        main_menu.init_for_hwnd(window.hwnd() as _);
+    }
+    #[cfg(target_os = "linux")]
+    {
+        main_menu.init_for_gtk_window(window.gtk_window(), window.default_vbox());
+    }
+    #[cfg(target_os = "macos")]
+    {
+        main_menu.init_for_nsapp();
+    }
 
     // using Config::default fixes the crash on macos
     // not adding the `main_menu` in `webview_config()` also fixes the crash on macos
@@ -65,84 +109,14 @@ pub(crate) fn webview_config() -> Config {
 }
 
 pub fn get_window_builder(with_predefined_size: bool, with_menu: bool) -> WindowBuilder {
-    let main_menu = Menu::new();
-    let app_menu = Submenu::new("Uplink", true);
-    let edit_menu = Submenu::new("Edit", true);
-    let window_menu = Submenu::new("Window", true);
-
-    let _ = app_menu.append_items(&[
-        &PredefinedMenuItem::about("Uplink".into(), Some(AboutMetadata::default())),
-        &PredefinedMenuItem::quit(None),
-    ]);
-    // add native shortcuts to `edit_menu` menu
-    // in macOS native item are required to get keyboard shortcut
-    // to works correctly
-    let _ = edit_menu.append_items(&[
-        &PredefinedMenuItem::undo(None),
-        &PredefinedMenuItem::redo(None),
-        &PredefinedMenuItem::separator(),
-        &PredefinedMenuItem::cut(None),
-        &PredefinedMenuItem::copy(None),
-        &PredefinedMenuItem::paste(None),
-        &PredefinedMenuItem::select_all(None),
-    ]);
-
-    let _ =  window_menu.append_items(&[
-        &PredefinedMenuItem::minimize(None),
-        //&PredefinedMenuItem::zoom(None),
-        &PredefinedMenuItem::separator(),
-        &PredefinedMenuItem::show_all(None),
-        &PredefinedMenuItem::fullscreen(None),
-        &PredefinedMenuItem::separator(),
-        &PredefinedMenuItem::close_window(None),
-    ]);
-
-    let _ = main_menu.append_items(&[
-        &app_menu,
-        &edit_menu,
-        &window_menu
-    ]);
-
-    /*let mut event_loop_builder = EventLoopBuilder::new();
-
-    #[cfg(target_os = "windows")]
-    {
-        let menu_bar = main_menu.clone();
-        event_loop_builder.with_msg_hook(move |msg| {
-            use windows_sys::Win32::UI::WindowsAndMessaging::{TranslateAcceleratorW, MSG};
-            unsafe {
-                let msg = msg as *const MSG;
-                let translated = TranslateAcceleratorW((*msg).hwnd, menu_bar.haccel(), msg);
-                translated == 1
-            }
-        });
-    }*/
-
-    //let event_loop = event_loop_builder.build();
-
     let mut window = WindowBuilder::new()
         .with_title("uplink")
         .with_resizable(true)
         // We start the min inner size smaller because the prelude pages like unlock can be rendered much smaller.
         .with_min_inner_size(LogicalSize::new(300.0, 350.0));
-    // .build(&event_loop)
-    // .unwrap();
 
     if with_predefined_size {
         window = window.with_inner_size(LogicalSize::new(950.0, 600.0));
-    }
-
-    #[cfg(target_os = "windows")]
-    {
-        main_menu.init_for_hwnd(window.hwnd() as _);
-    }
-    #[cfg(target_os = "linux")]
-    {
-        main_menu.init_for_gtk_window(window.gtk_window(), window.default_vbox());
-    }
-    #[cfg(target_os = "macos")]
-    {
-        main_menu.init_for_nsapp();
     }
 
     if with_menu {
