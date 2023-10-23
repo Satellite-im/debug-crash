@@ -17,9 +17,11 @@ use tracing_subscriber::{
 };
 
 #[cfg(target_os = "linux")]
-use wry::application::platform::unix::WindowExtUnix;
+use dioxus_desktop::wry::application::platform::unix::WindowExtUnix;
 #[cfg(target_os = "windows")]
-use wry::application::platform::windows::{EventLoopBuilderExtWindows, WindowExtWindows};
+use dioxus_desktop::wry::application::platform::windows::{
+    EventLoopBuilderExtWindows, WindowExtWindows,
+};
 
 fn main() {
     let my_filter = FilterFn::new(|_metadata| true);

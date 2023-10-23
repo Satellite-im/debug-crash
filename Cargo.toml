@@ -6,13 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dioxus = { git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
-dioxus-hooks ={ git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
-dioxus-html ={ git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
-dioxus-router ={ git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
-dioxus-desktop = { git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2", features = ["transparent"] }
-dioxus-core ={ git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
-fermi ={ git = "https://github.com/satellite-im/dioxus", rev = "1dba57f39db8485ccdc03f3a6c11a6fcbb2f87f2" }
+dioxus = { git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
+dioxus-hooks ={ git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
+dioxus-html ={ git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
+dioxus-router ={ git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
+dioxus-desktop = { git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f", features = ["transparent"] }
+dioxus-core ={ git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
+fermi ={ git = "https://github.com/satellite-im/dioxus", rev = "99cf5c79ff76241eb4b5763539931261d71e114f" }
 
 tracing-subscriber = { version = "0.3.17", features = [ "fmt"] }
 
